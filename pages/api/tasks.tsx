@@ -15,9 +15,12 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
             break;
         case 'DELETE':
             removeTask(req, res)
+            break
         case 'PATCH':
             completeTask(req, res)
+            break;
         default:
+            res.status(405).end();
             break;
     }
 }
@@ -41,15 +44,8 @@ function removeTask(req: NextApiRequest, res: NextApiResponse) {
 
 function completeTask(req: NextApiRequest, res: NextApiResponse) {
     const id = req.body.id;
-    const newList = tasks.map(t => {
-        if (t.id=== id) {
-          t.checked = !t.checked
-        }
-  
-        return t
-      })
-  
-    tasks = newList;
-
+    const idx = tasks.findIndex(item => item.id === id)
+    tasks[idx].checked = !tasks[idx].checked;
+    
     res.status(200).json(tasks);
 }
